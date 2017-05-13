@@ -22,6 +22,26 @@ Route::get('/mensaje',function (){
     $mensaje->texto="hola";
     $mensaje->fecha=\Carbon\Carbon::now();
     $mensaje->save();
-   $mensaje = \App\Mensaje::all();
-   return view('welcome');
+    return view('welcome');
+});
+
+Route::get('/chat',function (){
+    $mensajes = App\Mensaje::all();
+    return view('chat', ['mensajes' => $mensajes]);
+});
+
+
+Route::post('/chat', function () {
+    if (request()->get('usuario') == "" or request()->get('mensaje')== ""){
+        return redirect()->to('/chat');
+    }
+    $mensaje = new \App\Mensaje();
+    $mensaje->usuario = request()->get('usuario');
+    $mensaje->texto = request()->get('mensaje');
+    $mensaje->fecha=\Carbon\Carbon::now();
+    $mensaje->save();
+//    $mensajes = App\Mensaje::all();
+//    return \Illuminate\Support\Facades\Redirect::to('chat');
+    return redirect()->to('/chat');
+//    return view('chat', ['mensajes' => $mensajes]);
 });
